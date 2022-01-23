@@ -1,13 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {Button, Container, Form, FormGroup, Input} from "reactstrap";
 import {toast} from "react-toastify";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {addCourse, updateCourse} from "./service";
 import {SUCCESS} from "../api/responseCode";
 
 function AddCourse(){
     const[course, setCourse] = useState({});
     const[isDisabled, setIsDisabled] = useState(false);
+    const navigate = useNavigate();
 
     const location = useLocation();
     const getCourse = location.state != null ? location.state.course : null;
@@ -31,7 +32,8 @@ function AddCourse(){
                 .then((res) => {
                     if(res.data.responseCode === SUCCESS){
                         toast.success("course updated successfully !");
-                        clearField();
+                        navigate('/view-courses');
+                        // clearField();
                     } else {
                         toast.error("Failed to update course !");
                         console.log(res.data.response);
@@ -46,7 +48,8 @@ function AddCourse(){
                 .then((res) => {
                     if(res.data.responseCode === SUCCESS){
                         toast.success("course added successfully !");
-                        clearField();
+                        navigate('/view-courses');
+                        // clearField();
                     } else {
                         toast.error("Failed to add course !");
                         console.log(res.data.response);
@@ -62,7 +65,7 @@ function AddCourse(){
     }
 
     const clearField = () => {
-        setCourse({id: "", title: "", description: ""});
+        setCourse({id: course.id, title: "", description: ""});
     };
 
     return(
